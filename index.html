@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        input,
+        textarea {
+            resize: none;
+            width: 600px !important;
+        }
+
+        .dodr {
+            position: fixed;
+            right: 20%;
+            top: -100px;
+            transition: 0.3s;
+        }
+
+        .active {
+            top: 30px;
+        }
+
+        .time {
+            font-weight: 500;
+            font-size: 20px;
+            padding-right: 30px;
+            display: block;
+            color: black;
+            margin-left: auto;
+        }
+
+        .bg {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="todo-list">
+        <div v-bind:class="className" class="dodr alert alert-warning" role="alert">
+            Dodr ichini toldr
+        </div>
+
+        <h1 class="text-center">TodoList</h1>
+        <div class="container">
+            <div class="d-flex flex-column align-items-center gap-3">
+                <input type="text" @keydown.enter="addTask" class="form-control" placeholder="Title" v-model="title">
+                <textarea type="text" class="form-control" placeholder="Description" v-model="descr"></textarea>
+                <button @click="addTask" class="btn btn-primary">Add Task</button>
+            </div>
+        </div>
+        <div class="container">
+            <section v-for="(todo,i) in todoList">
+                <div class="card mt-4" :class="todo.class">
+                    <div class="card-header d-flex flex-wrap justify-content-between">
+                        <h2 v-if="!todo.visible">{{i+1}} : {{todo.title}}</h2>
+                        <input @keydown.enter="save(i)" @blur="save(i)" v-if="todo.visible" type="text" v-model="todo.title">
+                        <div class="card-btns d-flex align-items-center gap-3">
+                            <button @click="change(i)" v-if="todo.done" class="btn btn-success">Done</button>
+                            <button @click="change(i)" v-if="!todo.done" class="btn btn-primary">Undo</button>
+                            <button v-if="todo.edit" class="btn btn-warning" @click="edit(i)">Edit</button>
+                            <button v-if="!todo.edit" class="btn btn-info" @click="save(i)">Save</button>
+                            <button class="btn btn-danger" @click="del(i)">Delete</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-4 d-flex mb-0">
+                        <p v-if="!todo.visible">{{todo.descr}}</p>
+                        <textarea @keydown.enter="save(i)"  v-if="todo.visible" v-model="todo.descr"></textarea>
+                        <span class="time">{{todo.time}}</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>
